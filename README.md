@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/UlrikHolm/KA3-backend.svg?branch=master)](https://travis-ci.org/UlrikHolm/KA3-backend)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
