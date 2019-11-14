@@ -22,13 +22,20 @@ function apiFacade() {
   const logout = () => {
     localStorage.removeItem("jwtToken");
   }
-
+  const getTokenVal = (props) => {
+    const splitToken = getToken().split('.')[1]
+    const decryptToken = atob(splitToken)
+    const parsedToken = JSON.parse(decryptToken)
+    const val = parsedToken[props]
+    return(
+    val)
+  }
  
 const login = (user, password) => {
-    const options = makeOptions("POST", true,{username: user, password: password });
-    return fetch(URL + "/api/login", options)
-      .then(handleHttpErrors)
-      .then(res => {setToken(res.token) })
+  const options = makeOptions("POST", true,{username: user, password: password });
+  return fetch(URL + "/api/login", options)
+    .then(handleHttpErrors)
+    .then(res => {setToken(res.token)})
 }
 const fetchData = () => {
     const options = makeOptions("GET",true); //True add's the token
@@ -58,7 +65,8 @@ const makeOptions= (method,addToken,body) =>{
      loggedIn,
      login,
      logout,
-     fetchData
+     fetchData,
+     getTokenVal
  }
 }
 const facade = apiFacade();
