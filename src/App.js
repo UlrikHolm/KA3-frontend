@@ -35,14 +35,14 @@ function App(props) {
           <Route exact path="/">
             <Home />
           </Route>
-          <Route path="/products">
-            <Products bookFactory={bookFactory} />
+          <Route path="/swapi">
+            <Swapi />
           </Route>
-          <Route path="/find-book">
-            <FindBook bookFactory={bookFactory} />
+          <Route path="/user">
+          <User role = "user"/>
           </Route>
-          <Route path="/add-book">
-            <AddBook bookFactory={bookFactory} />
+          <Route path="/admin">
+            <User role = "admin"/>
           </Route>
           <Route path="/login">
             <LoginHandler
@@ -87,12 +87,12 @@ function Header({ isLoggedIn, loginMsg }) {
               <NavLink className="nav-link" exact to="/">Home</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink exact className="nav-link" exact to="/products">Products</NavLink>
+              <NavLink exact className="nav-link" exact to="/swapi">Swapi</NavLink>
             </li>
             {isLoggedIn && (
               <React.Fragment>
-                <li className="nav-item"><NavLink className="nav-link" exact to="/add-book">Add Book</NavLink></li>
-                <li className="nav-item"><NavLink className="nav-link" exact to="/find-book">Find Book</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" exact to="/user">User</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" exact to="/admin">Admin</NavLink></li>
               </React.Fragment>
             )}
           </ul>
@@ -120,49 +120,48 @@ function Home() {
   );
 }
 
-function Products({ bookFactory }) {
-  const booksCount = bookFactory.getBooks().length;
-  const lis = bookFactory.getBooks().map(b => <li key={b.id} ><b>{b.id}</b>: <b>{b.title}</b> - {b.info}</li>)
+function Swapi() {
+  const [swapiData, setSwapiData] = useState("Loading...");
+
+  var opts = {
+    headers: {
+      "Content-type": "application/json",
+      'Accept': 'application/json',
+    }
+  }
+
+  fetch('http://localhost:8080/securitystarter/api/info/swapidata')
+  .then(res=> res.json())
+  .then(data => setSwapiData(data))
+  .catch(err => setSwapiData("Loading failed."));
+
   return (
-    <div>
-      <h2>Products</h2>
-      <p>Antal: {booksCount}</p>
-      <ul>
-        {lis}
-      </ul>
+    <div className="row">
+      <div className="col-12">
+      <h2>This is the data:</h2>
+      <p>{swapiData}</p>
+      </div>
     </div>
   );
 }
 
-function FindBook({ bookFactory }) {
-  const [bookId, changeBookId] = useState("");
-  const [book, changeBook] = useState(null);
 
-  const findBook = () => {
-    const foundBook = bookFactory.findBook(bookId);
-    changeBook(foundBook);
-  }
+function User({role}) {
+  const [userData, setUserData] = useState("Loading...");
 
-  const deleteBook = (id) => {
-    bookFactory.deleteBook(id);
-    changeBook(null);
-  }
+  var opts = facade.makeOptions("GET",true)
+
+  fetch('http://localhost:8080/securitystarter/api/info/' + role ,opts)
+  .then(res=> res.json())
+  .then(data => setUserData(data.message))
+  .catch(err => setUserData("Loading failed."));
 
   return (
-    <div>
-      <h2>Find Book</h2>
-      Book id: <input type="text" onChange={(event) => changeBookId(event.target.value)} value={bookId} />
-      <button onClick={findBook}>Find</button>
-      {book && (
-        <div>
-          <p>ID: {book.id}</p>
-          <p>Title: {book.title}</p>
-          <p>Info: {book.info}</p>
-          <div>
-            <button onClick={() => deleteBook(book.id)}>Delete</button>
-          </div>
-        </div>
-      )}
+    <div className="row">
+      <div className="col-12">
+      <h2>This is the data:</h2>
+      <p>{userData}</p>
+      </div>
     </div>
   );
 }
@@ -243,11 +242,11 @@ function LogIn({ login }) {
 
 }
 function LoggedIn() {
-  const [dataFromServer, setDataFromServer] = useState("Loading...")
+  // const [dataFromServer, setDataFromServer] = useState("Loading...")
 
-  useEffect(() => {
-    facade.fetchData().then(data => setDataFromServer(data.msg));
-  }, [])
+  // useEffect(() => {
+  //   facade.fetchData().then(data => setDataFromServer(data.msg));
+  // }, [])
 
   return (
     <div>
