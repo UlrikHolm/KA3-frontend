@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 import './App.css';
 import facade from "./apiFacade";
+import settings from "./settings"
 
 function App(props) {
   const { bookFactory } = props;
@@ -130,7 +131,7 @@ function Swapi() {
     }
   }
 
-  fetch('http://localhost:8080/securitystarter/api/info/swapidata')
+  fetch(settings.getURL("swapiUrl"))
   .then(res=> res.json())
   .then(data => setSwapiData(data))
   .catch(err => setSwapiData("Loading failed."));
@@ -151,7 +152,7 @@ function User({role}) {
 
   var opts = facade.makeOptions("GET",true)
 
-  fetch('http://localhost:8080/securitystarter/api/info/' + role ,opts)
+  fetch(settings.getURL("userUrl") + role ,opts)
   .then(res=> res.json())
   .then(data => setUserData(data.message))
   .catch(err => setUserData("Loading failed."));
