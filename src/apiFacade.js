@@ -1,4 +1,6 @@
-const URL = "http://localhost:8080/securitystarter";
+import settings from "./settings"
+
+const URL = settings.getURL("loginApi");
  
 function handleHttpErrors(res) {
  if (!res.ok) {

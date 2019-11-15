@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
   Route,
   NavLink,
@@ -49,8 +49,6 @@ function App(props) {
               loginMsg={isLoggedIn ? "Logout" : "Login"}
               isLoggedIn={isLoggedIn}
               setLoginStatus={setLoginStatus}
-
-
             />
           </Route>
           <Route>
@@ -86,21 +84,21 @@ function Header({ isLoggedIn, loginMsg }) {
         <div className="collapse navbar-collapse" id="navbarResponsive">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <NavLink exact className="nav-link" to="/">Home</NavLink>
+              <NavLink className="nav-link" exact to="/">Home</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/products">Products</NavLink>
+              <NavLink exact className="nav-link" exact to="/products">Products</NavLink>
             </li>
             {isLoggedIn && (
               <React.Fragment>
-                <li className="nav-item"><NavLink className="nav-link" to="/add-book">Add Book</NavLink></li>
-                <li className="nav-item"><NavLink className="nav-link" to="/find-book">Find Book</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" exact to="/add-book">Add Book</NavLink></li>
+                <li className="nav-item"><NavLink className="nav-link" exact to="/find-book">Find Book</NavLink></li>
               </React.Fragment>
             )}
           </ul>
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <NavLink className="nav-link" to="/login">{loginMsg}</NavLink>
+              <NavLink className="nav-link" exact to="/login">{loginMsg}</NavLink>
             </li>
           </ul>
         </div>
@@ -108,6 +106,7 @@ function Header({ isLoggedIn, loginMsg }) {
     </nav>
   );
 }
+
 
 function Home() {
   return (
@@ -282,8 +281,6 @@ function LoginHandler({ isLoggedIn, setLoginStatus }) {
   const login = (user, pass) => {
     facade.login(user, pass)
       .then(res => setLoginStatus(!isLoggedIn))
-      //.then(res => console.log(facade.getToken()));
-      .then(() => console.log(facade.getTokenVal("username")))
   }
 
   return (
